@@ -2,12 +2,14 @@
 // let 키워드로 변수를 정의한다.
 let cards = [];
 
+let cardTable = document.querySelector(".card-table"); // card-table 클래스를 가진 div를 가져온다.
 
 
 // implement the Fetch API to grab the card JSON file
-fetch("./data/card_info.json")
-    .then(Response => Response.json())
-    .then((data) => {
+// 파일에서 데이터를 가져와서, 자바스크립트가 쓸 수 있는 형태로 바꿔주는 과정
+fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. fetch()는 "약속(Promise)"를 return한다다. 
+    .then(Response => Response.json()) // then: 약속(promise)가 끝나고 나면, 그 결과를 가지고 다음 작업을 하라. Response라는 이름으로 응답을 받고 parsing한다.
+    .then((data) => { // 파싱이 끝나면 객체를 data란 이름으로 받아온다. 
         // Option 1 using MAP
         // const cardsWithMap = data.map(card => [card, card]).flat();
         // console.log(cardsWithMap);
@@ -20,13 +22,83 @@ fetch("./data/card_info.json")
 
         // Option 3 (easiest)
         cards = [...data, ...data];
-        console.log(cards);
+
+        // deal our cards
+        dealCards(cards);
 
 
     })
     .catch((error) => {
         console.log("Error fetching card data: ", error)
-    })
+    });
+
+    function dealCards(cards) {
+        console.log('welcome to the random card game')
+
+        let fragment = document.createDocumentFragment(); //  document.createDocumentFragment() returns a minimal document object with no parent
+            
+
+        // cards 배열을 for of 반복문으로 순회한다.
+        for (const card of cards) {
+            // OPTION 1: directly adding created elements to the DOM
+            // #1. create the card wrapper, 문서 객체를 생성한다.
+            // let cardElement = document.createElement("div"); // document 객체를 써서 DOM에 접근한다.
+            // cardElement.classList.add("card"); // 클래스를 부여한다.
+            // cardElement.setAttribute("data-name", card.name); // 속성을 부여한다.
+
+            // // #2. add the front and back of the card
+            // cardElement.innerHTML = `
+            //     <div class="back">
+            //         <img class="back-image" src="${card.image}.png">
+            //     </div>
+            //     <div class="front"></div>
+            // `;
+
+            // // 카드를 테이블에 연결한다.
+            // cardTable.appendChild(cardElement);
+
+            // Option 2: using fragments.
+            // create our entire card
+            // div class = card 요소를 새로 만든다.
+            let cardElement = document.createElement("div"); 
+            cardElement.classList.add("card");
+            cardElement.setAttribute("data-name", card.name);
+
+            // create both the front and back of the cards, seperately
+            // Front of card
+            // 카드 front 영역 div만든다.
+            let frontCardDiv = document.createElement("div");
+            frontCardDiv.classList.add("front");
+
+            // Back of card
+            // 카드 back 영역 div 만든다.
+            let backCardDiv = document.createElement("div");
+            backCardDiv.classList.add("back");
+
+            // add image to the back of the card
+            // 카드 back에 들어갈 img 태그 만든다.
+            let img = document.createElement("img");
+            img.classList.add("back-image");
+            img.src = `${card.image}.png`;
+            // 만든 img를 backCardDiv에 붙인다.
+            backCardDiv.appendChild(img);
+
+            // append front and back of the card, to the card itself.
+            // 만든 cardElement안에 front와 back 모두 붙인다.
+            cardElement.append(frontCardDiv, backCardDiv);
+            
+            // attach card to the fragment
+            // 최종적으로 만든 cardElement를 fragment 안에 담아둔다.
+            fragment.appendChild(cardElement);
+            console.log(fragment.childElementCount);
+
+        } // end of the for loop
+
+        // append the entire fragment to the live DOM
+        // fragment 에 담긴 모든 카드 요소를 한 번에 실제 DOM에 붙인다.
+        cardTable.appendChild(fragment);
+        console.log('emptied:', fragment.childElementCount);
+    };
 
 
 /** Loadcards()
