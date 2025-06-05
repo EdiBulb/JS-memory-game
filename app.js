@@ -45,22 +45,41 @@ fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. f
         let currentIndex = totalCards - 1;
 
         // use Fisher-Yates (or Knuth) shuffle algorithm. This method is efficient and ensures that each possible permutation of the array has an equal probability of occurring.
-
+        
+        /** 
         // option 1
         // Loop through the array from the last element to the first
+        
         for(currentIndex; currentIndex > 0; currentIndex--) {
             // Generate a random index between 0 and currentIndex (inclusive)
             let randomCardIndex = Math.floor(Math.random() * (currentIndex + 1));
+            console.log("randomCardIndex: ", randomCardIndex);
 
             // Swap the elements at currentIndex and randomIndex using a temporary variable
             let randomCard = shuffledCardsArray[randomCardIndex];
+            console.log("randomCard: ", randomCard);
+
+            // replace the randomCard with the card at the currentIndex
+            shuffledCardsArray[randomCardIndex] = shuffledCardsArray[currentIndex];
+            console.log("shuffledCardsArrayStep1: ", [...shuffledCardsArray]);
+
+            // replace the card at currentIndex with the randomCard
+            shuffledCardsArray[currentIndex] = randomCard;
+            console.log("shuffledCardsArrayStep2: ", [...shuffledCardsArray]);
+
         }
+        */
 
-        // oprion 2
+        // option 2
         // Swap elements using destructuring assignment in JavaScript
+        for(currentIndex; currentIndex > 0; currentIndex--) {
+            // Generate a random index between 0 and currentIndex (inclusive)
+            let randomCardIndex = Math.floor(Math.random() * (currentIndex + 1));
+            [shuffledCardsArray[currentIndex], shuffledCardsArray[randomCardIndex]] = [shuffledCardsArray[randomCardIndex], shuffledCardsArray[currentIndex]];
 
+        }
          
-
+        return shuffledCardsArray;
 
     }; //  end shuffle // 이렇게 각 괄호가 끝나는 부분에, 의미하는 것을 적어두면 알아보기 쉽겠다. 습관으로 만들자.
 
