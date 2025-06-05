@@ -21,16 +21,48 @@ fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. f
         // console.log(cardsWithFlatMap);
 
         // Option 3 (easiest)
+        // 데이터를 갖고 cards 배열을 duplicate해서 만든다. 
         cards = [...data, ...data];
 
-        // deal our cards
-        dealCards(cards);
+        // shuffle the cards. 
+        let shuffledCards = shuffle();
+
+        // deal our cards // 카드를 돌리다.
+        dealCards(shuffledCards);
 
 
     })
     .catch((error) => {
         console.log("Error fetching card data: ", error)
-    });
+    }
+);// end fetch
+
+    // define shuffle function
+    function shuffle(){
+        // create a copy of the cards array to avoid mutating the original array
+        let shuffledCardsArray = [...cards];
+        let totalCards = shuffledCardsArray.length;
+        let currentIndex = totalCards - 1;
+
+        // use Fisher-Yates (or Knuth) shuffle algorithm. This method is efficient and ensures that each possible permutation of the array has an equal probability of occurring.
+
+        // option 1
+        // Loop through the array from the last element to the first
+        for(currentIndex; currentIndex > 0; currentIndex--) {
+            // Generate a random index between 0 and currentIndex (inclusive)
+            let randomCardIndex = Math.floor(Math.random() * (currentIndex + 1));
+
+            // Swap the elements at currentIndex and randomIndex using a temporary variable
+            let randomCard = shuffledCardsArray[randomCardIndex];
+        }
+
+        // oprion 2
+        // Swap elements using destructuring assignment in JavaScript
+
+         
+
+
+    }; //  end shuffle // 이렇게 각 괄호가 끝나는 부분에, 의미하는 것을 적어두면 알아보기 쉽겠다. 습관으로 만들자.
 
     function dealCards(cards) {
         console.log('welcome to the random card game')
@@ -109,7 +141,7 @@ fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. f
     function flipCard() {
         // add a css class to activate the flip effect
         this.classList.add("flipped"); // 클래스를 부여한다.
-    }
+    }// end filpCard
 
 
 /** Loadcards()
