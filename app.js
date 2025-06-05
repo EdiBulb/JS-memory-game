@@ -1,9 +1,10 @@
 // initialize card variables
 // let 키워드로 변수를 정의한다.
 let cards = [];
-
 let cardTable = document.querySelector(".card-table"); // card-table 클래스를 가진 div를 가져온다.
-
+let firstCard = null;
+let secondCard = null;
+let noFlipping = false; // flip을 할 수 있는지 없는지 // restrict user from flipping 3 or more cards at same time.
 
 // implement the Fetch API to grab the card JSON file
 // 파일에서 데이터를 가져와서, 자바스크립트가 쓸 수 있는 형태로 바꿔주는 과정
@@ -158,8 +159,24 @@ fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. f
     }; // end dealCards
 
     function flipCard() {
+        if(noFlipping) return; //  카드 2개 flip한 뒤 3번째 하려고 하면 함수 자체를 나간다. 
+
         // add a css class to activate the flip effect
         this.classList.add("flipped"); // 클래스를 부여한다.
+
+        // grab first card flipped over (clicked)
+        if(!firstCard) {
+            firstCard = this; // set the firstCard value to the div with class "card"
+            console.log("firstCard: ", firstCard);
+            return; // exit out of this flipCard function and wait for user to flip another card
+        }
+
+        secondCard = this;
+        console.log("secondCard:", secondCard);
+
+        noFlipping = true; // prevent user from clicking on more than 2 cards at once. 
+
+
     }// end filpCard
 
 
