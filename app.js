@@ -85,20 +85,31 @@ fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. f
 
             // append front and back of the card, to the card itself.
             // 만든 cardElement안에 front와 back 모두 붙인다.
-            cardElement.append(frontCardDiv, backCardDiv);
+            cardElement.append(backCardDiv,frontCardDiv); // 먼저 불린 순서로 카드가 쌓여서, 커버가 보이게 하려면 front를 나중에 불러야한다.
             
             // attach card to the fragment
             // 최종적으로 만든 cardElement를 fragment 안에 담아둔다.
             fragment.appendChild(cardElement);
-            console.log(fragment.childElementCount);
 
         } // end of the for loop
 
         // append the entire fragment to the live DOM
         // fragment 에 담긴 모든 카드 요소를 한 번에 실제 DOM에 붙인다.
         cardTable.appendChild(fragment);
-        console.log('emptied:', fragment.childElementCount);
-    };
+
+        // Attach click event listeners after all cards are added
+        let dealtCards = document.querySelectorAll('.card'); // 12개 카드를 모두 가져온다.
+        // forEach: 배열을 순회회
+        dealtCards.forEach(card => {
+
+            card.addEventListener("click", flipCard);
+        });
+    }; // end dealCards
+
+    function flipCard() {
+        // add a css class to activate the flip effect
+        this.classList.add("flipped"); // 클래스를 부여한다.
+    }
 
 
 /** Loadcards()

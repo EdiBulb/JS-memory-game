@@ -33,6 +33,7 @@ p {
 div.card {
     position: relative; /* setting up children's positioning to be relative to their parent card div*/
     transition: all 0.5s ease-in-out;
+    transform-style: preserve-3d; /*flip하는게 3d에만 적용되어서 preserve-3d를 적용해야한다.*/
 }
 
 
@@ -50,4 +51,17 @@ img.back-image {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.card .front {
+    position: absolute;
+    background-image: url("./images/cover.jpg");
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    backface-visibility: hidden; /* 카드가 돌아가면 hidden으로 한다.*/
+}
+
+.card.flipped {
+    transform: rotateY(180deg); /* rotate한다.*/
 }
