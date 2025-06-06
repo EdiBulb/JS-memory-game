@@ -5,6 +5,10 @@ let cardTable = document.querySelector(".card-table"); // card-table 클래스�
 let firstCard = null;
 let secondCard = null;
 let noFlipping = false; // flip을 할 수 있는지 없는지 // restrict user from flipping 3 or more cards at same time.
+let chancesRemaining = 7; // set how many times the user can try match all cards, before losing
+
+let counter = document.querySelector(".tries-remaining")
+counter.textContent = chancesRemaining;
 
 // implement the Fetch API to grab the card JSON file
 // 파일에서 데이터를 가져와서, 자바스크립트가 쓸 수 있는 형태로 바꿔주는 과정
@@ -164,6 +168,11 @@ function flipCard() {
 
     // add a css class to activate the flip effect
     this.classList.add("flipped"); // 클래스를 부여한다.
+    // prohibit user from clicking on the same card twice.
+    if(this === firstCard) {
+        alert("you must not click on the same card that you flipped over");
+        return ;
+    }
 
     // grab first card flipped over (clicked)
     if(!firstCard) {
@@ -191,15 +200,46 @@ function checkForMatch() {
 
 function unflipCards() {
     setTimeout(() => {
+        // examine whether the user has lost the game
+        --chancesRemaining;
+        counter.textContent = chancesRemaining;
+        if(chancesRemaining === 0) {
+            alert("You Lost");
+            return;
+        }
+
         // 뒤집는 CSS를 없애준다.
         firstCard.classList.remove("flipped");  
         secondCard.classList.remove("flipped");
+
+        resetFlags(); // 리셋셋
     }, 1000);
     
     
 }; // end unflipCards
 
+function matchCards() {
+    // remove the click event listener from our matched cards
+    firstCard.removeEventListener("click", flipCard);
+    secondCard.removeEventListener("click", flipCard);
 
+    // add a green color to matched cards
+    setCardBackground(firstCard, "greenyellow");
+    setCardBackground(secondCard, "greenyellow");
+    // reset variables / flags
+    resetFlags();
+
+}; // end matchCards
+
+function setCardBackground(card, color) {
+    card.children[0].style.background = color;
+}
+
+function resetFlags() {
+    firstCard = null;
+    secondCard = null;
+    noFlipping = false; // open up all ummatched cards to be flipped again
+}; // end resetFlags
 
 
 /** Loadcards()
