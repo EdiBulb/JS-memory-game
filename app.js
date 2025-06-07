@@ -205,6 +205,7 @@ function unflipCards() {
         counter.textContent = chancesRemaining;
         if(chancesRemaining === 0) {
             alert("You Lost");
+            showImageOverlay();
             return;
         }
 
@@ -241,6 +242,28 @@ function resetFlags() {
     noFlipping = false; // open up all ummatched cards to be flipped again
 }; // end resetFlags
 
+function showImageOverlay() {
+    // create the div wrapper
+    let wrapper = document.createElement("div");
+    wrapper.classList.add("image-overlay"); // adding this class for CSS styling
+
+    // create the image child
+    let image = document.createElement("img");
+    image.src = "./images/loser.jpg";
+    // append the image as a child to the wrapper div
+    wrapper.appendChild(image);
+
+    // finally, attach the wrapper to the DOM
+    document.body.appendChild(wrapper);
+
+    //transition the opacity to 1
+    requestAnimationFrame(() => {
+        wrapper.style.opacity = 1;
+    })
+
+}; // showImageOverlay
+
+// showImageOverlay();
 
 /** Loadcards()
 */
