@@ -263,6 +263,32 @@ function showImageOverlay() {
 
 }; // showImageOverlay
 
+// creating star function
+function fallingStar() {
+    let star = document.createElement("div");
+    star.classList.add("star");
+    // style star
+    // set random horizontal position
+    let randomX = Math.random() * window.innerWidth;
+    star.style.left = `${randomX}px`; // style로 스타일을 지정한다.
+    // set a random duration
+    let duration = Math.random()*2 + 3;
+    star.style.animationDuration =  `${duration}s`;
+
+    // append star to its wrapper div / html 에 있는 star-wrapper를 이렇게 가져오는구나.
+    document.getElementsByClassName("star-wrapper")[0].appendChild(star);
+
+    // remove the star from the DOM, when the animation ends
+    star.addEventListener('animationend', () => {
+        star.remove();
+    });
+    
+}; // fallingStar
+fallingStar();
+fallingStar();
+fallingStar();
+fallingStar();
+fallingStar();
 // showImageOverlay();
 
 /** Loadcards()
