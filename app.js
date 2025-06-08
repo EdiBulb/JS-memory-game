@@ -5,7 +5,9 @@ let cardTable = document.querySelector(".card-table"); // card-table 클래스�
 let firstCard = null;
 let secondCard = null;
 let noFlipping = false; // flip을 할 수 있는지 없는지 // restrict user from flipping 3 or more cards at same time.
-let chancesRemaining = 7; // set how many times the user can try match all cards, before losing
+let chancesRemaining = 10; // set how many times the user can try match all cards, before losing
+
+let winCounter = null; // will update this win counter on every match
 
 let counter = document.querySelector(".tries-remaining")
 counter.textContent = chancesRemaining;
@@ -15,6 +17,8 @@ counter.textContent = chancesRemaining;
 fetch("./data/card_info.json") // fetch() 파일을 요청하는 함수이다. fetch()는 "약속(Promise)"를 return한다다. 
     .then(Response => Response.json()) // then: 약속(promise)가 끝나고 나면, 그 결과를 가지고 다음 작업을 하라. Response라는 이름으로 응답을 받고 parsing한다.
     .then((data) => { // 파싱이 끝나면 객체를 data란 이름으로 받아온다. 
+        winCounter = data.length;
+
         // Option 1 using MAP
         // const cardsWithMap = data.map(card => [card, card]).flat();
         // console.log(cardsWithMap);
@@ -177,12 +181,12 @@ function flipCard() {
     // grab first card flipped over (clicked)
     if(!firstCard) {
         firstCard = this; // set the firstCard value to the div with class "card"
-        console.log("firstCard: ", firstCard);
+        // console.log("firstCard: ", firstCard);
         return; // exit out of this flipCard function and wait for user to flip another card
     }
 
     secondCard = this;
-    console.log("secondCard:", secondCard);
+    // console.log("secondCard:", secondCard);
 
     noFlipping = true; // prevent user from clicking on more than 2 cards at once. 
 
@@ -220,6 +224,20 @@ function unflipCards() {
 }; // end unflipCards
 
 function matchCards() {
+    // reduce winCounter
+    --winCounter;
+    if(winCounter===0) {
+        setTimeout(() => {
+            alert("YOU WIN, PLEASE RESTART THE BROWSER");
+            let starInterval = setInterval(fallingStar, 300); // Create a new star.
+
+            setTimeout(() => {
+            clearInterval(starInterval);
+        }, 5000);
+        
+        }, 1000);
+        
+    }; 
     // remove the click event listener from our matched cards
     firstCard.removeEventListener("click", flipCard);
     secondCard.removeEventListener("click", flipCard);
@@ -284,11 +302,7 @@ function fallingStar() {
     });
     
 }; // fallingStar
-fallingStar();
-fallingStar();
-fallingStar();
-fallingStar();
-fallingStar();
+
 // showImageOverlay();
 
 /** Loadcards()
