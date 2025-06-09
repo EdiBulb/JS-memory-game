@@ -10,6 +10,8 @@ let chancesRemaining = 10; // set how many times the user can try match all card
 let winCounter = null; // will update this win counter on every match
 
 let counter = document.querySelector(".tries-remaining")
+let chanceBar = document.getElementById("chance-bar"); // progress bar를 가져옴
+
 counter.textContent = chancesRemaining;
 
 // implement the Fetch API to grab the card JSON file
@@ -207,6 +209,8 @@ function unflipCards() {
         // examine whether the user has lost the game
         --chancesRemaining;
         counter.textContent = chancesRemaining;
+        chanceBar.value = chancesRemaining; // progress bar 업데이트
+
         if(chancesRemaining === 0) {
             alert("You Lost");
             showImageOverlay();
